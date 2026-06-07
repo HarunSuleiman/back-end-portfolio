@@ -47,28 +47,12 @@ app.get("/", (req, res) => {
 
 app.post("/contact", async (req, res) => {
   try {
-    console.log("REQUEST BODY:", req.body);
-
-    const info = await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: "harunsuleiman55@gmail.com",
-      subject: "Portfolio Test",
-      text: "Testing email",
+    res.json({
+      emailUser: process.env.EMAIL_USER,
+      emailPassExists: !!process.env.EMAIL_PASS,
     });
-
-    console.log("EMAIL SENT:", info);
-
-    res.status(200).json({
-      success: true,
-      info,
-    });
-  } catch (error) {
-    console.error("FULL EMAIL ERROR:", error);
-
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
+  } catch (err) {
+    console.log(err);
   }
 });
 //
