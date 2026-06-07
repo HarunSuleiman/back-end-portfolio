@@ -23,12 +23,13 @@ console.log("EMAIL_USER =", process.env.EMAIL_USER);
 console.log("EMAIL_PASS exists =", !!process.env.EMAIL_PASS);
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
+  service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false,
   },
 });
 
@@ -46,29 +47,27 @@ app.get("/", (req, res) => {
 
 app.post("/contact", async (req, res) => {
   try {
-    const { name, email, subject, message } = req.body;
+    console.log("REQUEST BODY:", req.body);
 
-    await transporter.sendMail({
+    const info = await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: "harunsuleiman55@gmail.com",
-      subject: `Portfolio Contact: ${subject}`,
-      html: `
-        <h2>New Portfolio Contact Message</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Subject:</strong> ${subject}</p>
-        <p><strong>Message:</strong> ${message}</p>
-      `,
+      subject: "Portfolio Test",
+      text: "Testing email",
     });
+
+    console.log("EMAIL SENT:", info);
 
     res.status(200).json({
-      message: "Message sent successfully",
+      success: true,
+      info,
     });
   } catch (error) {
-    console.error("EMAIL ERROR:", error);
+    console.error("FULL EMAIL ERROR:", error);
 
     res.status(500).json({
-      error: "Failed to send email",
+      success: false,
+      error: error.message,
     });
   }
 });
