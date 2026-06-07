@@ -1,6 +1,10 @@
+
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
+
 
 const app = express();
 
@@ -14,6 +18,9 @@ app.use(
   }),
 );
 app.use(express.json());
+
+console.log("EMAIL_USER =", process.env.EMAIL_USER);
+console.log("EMAIL_PASS exists =", !!process.env.EMAIL_PASS);
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
