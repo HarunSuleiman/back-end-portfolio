@@ -31,6 +31,14 @@ const transporter = nodemailer.createTransport({
   tls: {
     rejectUnauthorized: false,
   },
+  // Force IPv4
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  // Add connection timeout and family
+  connectionTimeout: 10000,
+  socketTimeout: 10000,
+  family: 4, // Force IPv4
 });
 
 transporter.verify((error, success) => {
