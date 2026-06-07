@@ -5,16 +5,18 @@ const nodemailer = require("nodemailer");
 
 const app = express();
 
-// MIDDLEWARE
+// MIDDLEWARE if you want to allow CORS from all origins, you can use the following middleware:
 app.use(cors());
 app.use(express.json());
 
-// DATABASE CONNECTION
+
+// DATABASE CONNECTION - UPDATED FOR RENDER
 const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "portfolio_contact",
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_NAME || "portfolio_contact",
+  port: process.env.DB_PORT || 3306
 });
 
 // CONNECT DATABASE
@@ -23,7 +25,6 @@ connection.connect((err) => {
     console.error("Database connection failed:", err.message);
     return;
   }
-
   console.log("Connected to MySQL database!");
 });
 
